@@ -1,32 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(AudioSource)), RequireComponent(typeof(MovementComponent))]
 
 public class Player : MonoBehaviour
 {
     [SerializeField] MovementComponent movement = null;
-    [SerializeField] Controls controls = null;
     [SerializeField] AudioSource audioData;
-
-    [SerializeField] InputAction move = null;
-    [SerializeField] InputAction rotate = null;
-    //[SerializeField] InputAction jump = null;
 
     [SerializeField] int score = 0;
 
     public int Score => score;
-
-    public InputAction Move => move;
-    public InputAction Rotate => rotate;
-    //public InputAction Jump => jump;
-
-    private void Awake()
-    {
-        controls = new Controls();
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -40,23 +24,10 @@ public class Player : MonoBehaviour
 
     }
 
-    private void OnEnable()
-    {
-        move = controls.Character.Move;
-        move.Enable();
-        rotate = controls.Character.Rotate;
-        rotate.Enable();
-        //jump = controls.Character.Jump;
-        //jump.Enable();
-        //jump.performed += Jump;
-    }
-
     void Init()
     {
         score = 0;
         movement = GetComponent<MovementComponent>();
-        if (!movement) return;
-        movement.Init(this);
         audioData = GetComponent<AudioSource>();
     }
 
@@ -66,6 +37,7 @@ public class Player : MonoBehaviour
         if (!_coin) return;
         UpdateScore(_coin.Value);
         audioData.Play();
+        CoinManager.Instance.RemoveCoin();
         Destroy(_coin.gameObject);
     }
 

@@ -1,13 +1,19 @@
 using UnityEngine;
-//using UnityEngine.InputSystem;
+using UnityEngine.InputSystem;
 
 public class MovementComponent : MonoBehaviour
 {
-    [SerializeField] Player owner = null;
-
+    Rigidbody rigidBody = null;
+    [SerializeField] LayerMask groundMask = 0;
     [SerializeField] float moveSpeed = 10;
     [SerializeField] float rotateSpeed = 100;
-    [SerializeField] public float jumpHeight = 5;
+    [SerializeField] public float jumpHeight = 20f;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        rigidBody = GetComponent<Rigidbody>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -16,28 +22,29 @@ public class MovementComponent : MonoBehaviour
         Rotate();
     }
 
-    public void Init(Player _owner)
-    {
-        owner = _owner;
-    }
-
     void Move()
     {
-        if (!owner) return;
-        Vector2 _movementValue = owner.Move.ReadValue<Vector2>();
+        Vector2 _movementValue = InputManager.Instance.Move.ReadValue<Vector2>();
         transform.position += transform.forward * _movementValue.y * Time.deltaTime * moveSpeed;
         transform.position += transform.right * _movementValue.x * Time.deltaTime * moveSpeed;
     }
 
     void Rotate()
     {
-        if (!owner) return;
-        float _rotValue = owner.Rotate.ReadValue<float>();
+        float _rotValue = InputManager.Instance.Rotate.ReadValue<float>();
         transform.eulerAngles += transform.up * _rotValue * Time.deltaTime * rotateSpeed;
     }
 
-    //void Jump(InputAction.CallbackContext _context)
-    //{
-    //    transform.position += new Vector3(0, jumpHeight, 0);
-    //}
+    public void Jump(InputAction.CallbackContext _context)
+    {
+        if (CheckIfOnGround())
+            rigidBody.AddForce(transform.up * 100 * jumpHeight);
+    }
+
+    bool CheckIfOnGround()
+    {
+        bool _touchGround = Physics.Raycast(transform.position, -transform.up, 1f, groundMask);
+        if (_touchGround) return true;
+        return false;
+    }
 }

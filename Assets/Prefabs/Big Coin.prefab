@@ -9,8 +9,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 688969740192693382, guid: 539be85d61a9afc4fada3f74fe52373c, type: 3}
+      propertyPath: type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 688969740192693382, guid: 539be85d61a9afc4fada3f74fe52373c, type: 3}
       propertyPath: value
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 688969740192693382, guid: 539be85d61a9afc4fada3f74fe52373c, type: 3}
+      propertyPath: coinType
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 688969740192693382, guid: 539be85d61a9afc4fada3f74fe52373c, type: 3}
       propertyPath: m_Enabled
