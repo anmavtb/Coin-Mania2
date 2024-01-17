@@ -1,12 +1,11 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(AudioSource)), RequireComponent(typeof(MovementComponent))]
+[RequireComponent(typeof(AudioSource), typeof(MovementComponent))]
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] MovementComponent movement = null;
-    [SerializeField] AudioSource audioData;
+    MovementComponent movement = null;
+    AudioSource audioData;
 
     [SerializeField] int score = 0;
 

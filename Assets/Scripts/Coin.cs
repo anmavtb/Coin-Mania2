@@ -1,6 +1,4 @@
 using UnityEngine;
-using static Coin;
-using static Unity.VisualScripting.Dependencies.Sqlite.SQLite3;
 
 public class Coin : MonoBehaviour
 {
