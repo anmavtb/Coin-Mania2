@@ -17,6 +17,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 688969740192693382, guid: 539be85d61a9afc4fada3f74fe52373c, type: 3}
+      propertyPath: height
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 688969740192693382, guid: 539be85d61a9afc4fada3f74fe52373c, type: 3}
       propertyPath: coinType
       value: 1
       objectReference: {fileID: 0}

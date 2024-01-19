@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class CoinManager : Singleton<CoinManager>
 {
@@ -12,6 +13,8 @@ public class CoinManager : Singleton<CoinManager>
 
     public int CoinsNumber => coinsNumber;
 
+    [SerializeField] Transform point = null;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +22,7 @@ public class CoinManager : Singleton<CoinManager>
         {
             coinsDictionary.Add(_coin.CoinType, _coin);
         }
-        PlaceCoins();
+        PlaceCoinsInWorld();
     }
 
     // Update is called once per frame
@@ -37,12 +40,13 @@ public class CoinManager : Singleton<CoinManager>
         }
     }
 
-    void PlaceCoins()
+    void PlaceCoinsInWorld()
     {
         for (int i = 0; i < coinsNumber; i++)
         {
             Coin _coin = GetRandomCoin();
-            Instantiate(_coin, new Vector3(5, 2, i), Quaternion.identity);
+            Vector3 _coinPos = RandomPointOnPlatform();
+            Instantiate(_coin, new Vector3(_coinPos.x, _coinPos.y + _coin.Height, _coinPos.z), Quaternion.identity);
         }
     }
 
@@ -55,5 +59,17 @@ public class CoinManager : Singleton<CoinManager>
         else
             coinsDictionary.TryGetValue(Coin.CoinTypes.COIN, out _randomCoin);
         return _randomCoin;
+    }
+
+    Vector3 RandomPointOnPlatform()
+    {
+        Vector3[] _platformSize = PlatformManager.Instance.GetRandomPlatform();
+        Debug.Log($"{_platformSize[0]} {_platformSize[1]}");
+        Vector3 _result = Vector3.zero;
+        if (_platformSize.Length < 2) return Vector3.zero;
+        _result.x = UnityEngine.Random.Range(_platformSize[0].x, _platformSize[1].x);
+        _result.y = _platformSize[0].y + .5f;
+        _result.z = UnityEngine.Random.Range(_platformSize[0].z, _platformSize[1].z);
+        return _result;
     }
 }

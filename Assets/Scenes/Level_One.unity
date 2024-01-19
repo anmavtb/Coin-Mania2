@@ -123,6 +123,37 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &324570933
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 324570935}
+  m_Layer: 0
+  m_Name: NavMesh
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &324570935
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324570933}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &612292417
 GameObject:
   m_ObjectHideFlags: 3
@@ -317,7 +348,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &835279940
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -491,7 +522,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0.22415602, y: 0, z: 0, w: 0.9745533}
-  m_LocalPosition: {x: 0, y: 5.4, z: -7}
+  m_LocalPosition: {x: 0, y: 4.4, z: -7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -613,7 +644,7 @@ Transform:
   m_GameObject: {fileID: 1175704529}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -673,8 +704,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93e6d480081a0594cb9b83edbcdbb8ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement: {fileID: 0}
-  audioData: {fileID: 0}
   score: 0
 --- !u!54 &1175704541
 Rigidbody:
@@ -834,7 +863,8 @@ MonoBehaviour:
   - {fileID: 688969740192693382, guid: 539be85d61a9afc4fada3f74fe52373c, type: 3}
   - {fileID: 4974941440813335041, guid: e61527a4e0f78b34cb9f6ca2d011f2e0, type: 3}
   coinsNumber: 100
-  RedCoinPercentChance: 0
+  RedCoinPercentChance: 50
+  point: {fileID: 5779418523445635011, guid: 539be85d61a9afc4fada3f74fe52373c, type: 3}
 --- !u!4 &1427150748
 Transform:
   m_ObjectHideFlags: 0
@@ -897,14 +927,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1427150746}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 767a69567c783f5489ef93e8cf2896cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   allPlatforms:
   - {fileID: 1540593611}
-  - {fileID: 835279943}
 --- !u!1 &1540593607
 GameObject:
   m_ObjectHideFlags: 0
@@ -1092,3 +1121,4 @@ SceneRoots:
   - {fileID: 835279943}
   - {fileID: 1175704533}
   - {fileID: 1427150748}
+  - {fileID: 324570935}

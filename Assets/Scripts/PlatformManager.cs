@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlatformManager : Singleton<PlatformManager>
@@ -16,10 +17,14 @@ public class PlatformManager : Singleton<PlatformManager>
 
     }
 
-    public Transform GetRandomPlatform()
+    public Vector3[] GetRandomPlatform()
     {
+        Vector3[]  _platformSize = new Vector3[2];
         int _random = Random.Range(0, allPlatforms.Length);
-        return allPlatforms[_random];
+        Bounds _bounds = allPlatforms[_random].GetComponent<Renderer>().bounds;
+        _platformSize[0] = new Vector3(_bounds.extents.x, allPlatforms[_random].position.y, _bounds.extents.z);
+        _platformSize[1] = new Vector3(-_bounds.extents.x, allPlatforms[_random].position.y, -_bounds.extents.z);
+        return _platformSize;
     }
 
     private void OnDrawGizmos()
