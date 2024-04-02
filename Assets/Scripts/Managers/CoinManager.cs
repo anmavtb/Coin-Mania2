@@ -1,19 +1,21 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class CoinManager : Singleton<CoinManager>
 {
     Dictionary<Coin.CoinTypes, Coin> coinsDictionary = new();
     [SerializeField] List<Coin> coinsList = null;
 
-    [SerializeField, Range(0, 100)] int coinsNumber = 50;
+    [SerializeField, Range(0, 999)] int coinsNumber = 50;
     [SerializeField, Range(0, 100)] int RedCoinPercentChance = 10;
 
-    public int CoinsNumber => coinsNumber;
+    [SerializeField] Transform parent = null;
 
-    [SerializeField] Transform point = null;
+    Vector3 playerSpawnPoint = Vector3.zero;
+    [SerializeField, Range(0, 10)] float minDistAllowed = 0;
+
+    public int CoinsNumber => coinsNumber;
 
     // Start is called before the first frame update
     void Start()
@@ -45,11 +47,15 @@ public class CoinManager : Singleton<CoinManager>
         for (int i = 0; i < coinsNumber; i++)
         {
             Coin _coin = GetRandomCoin();
-            Vector3 _coinPos = RandomPointOnPlatform();
-            Instantiate(_coin, new Vector3(_coinPos.x, _coinPos.y + _coin.Height, _coinPos.z), Quaternion.identity);
+            Vector3 _coinPos = RandomPointOnPlatform(PlatformManager.Instance.GetRandomPlatform());
+            Instantiate(_coin, new Vector3(_coinPos.x, _coinPos.y + _coin.Height, _coinPos.z), Quaternion.identity, parent);
         }
     }
 
+    /// <summary>
+    /// Chose a random coin from the dictionnary and sent it back.
+    /// </summary>
+    /// <returns></returns>
     Coin GetRandomCoin()
     {
         Coin _randomCoin = null;
@@ -61,10 +67,14 @@ public class CoinManager : Singleton<CoinManager>
         return _randomCoin;
     }
 
-    Vector3 RandomPointOnPlatform()
+    /// <summary>
+    /// Chose a random point on top of the given platform and sent this point back.
+    /// If this point is too close from the player spawn point (0,0,0) : call itself again to choose another point.
+    /// </summary>
+    /// <param name="_platformSize">The two corners of the given platform</param>
+    /// <returns></returns>
+    Vector3 RandomPointOnPlatform(Vector3[] _platformSize)
     {
-        Vector3[] _platformSize = PlatformManager.Instance.GetRandomPlatform();
-        Debug.Log($"{_platformSize[0]} {_platformSize[1]}");
         Vector3 _result = Vector3.zero;
         if (_platformSize.Length < 2) return Vector3.zero;
         _result.x = UnityEngine.Random.Range(_platformSize[0].x, _platformSize[1].x);
