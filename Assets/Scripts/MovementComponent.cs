@@ -5,6 +5,7 @@ public class MovementComponent : MonoBehaviour
 {
     Rigidbody rigidBody = null;
     [SerializeField] LayerMask groundMask = 0;
+    [SerializeField, ReadOnly] bool isOnGround = false;
     [SerializeField] float moveSpeed = 10;
     [SerializeField] float rotateSpeed = 100;
     [SerializeField] public float jumpHeight = 20f;
@@ -20,6 +21,7 @@ public class MovementComponent : MonoBehaviour
     {
         Move();
         Rotate();
+        CheckIfOnGround();
     }
 
     void Move()
@@ -37,14 +39,14 @@ public class MovementComponent : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext _context)
     {
-        if (CheckIfOnGround())
+        if (isOnGround)
             rigidBody.AddForce(transform.up * 100 * jumpHeight);
     }
 
     bool CheckIfOnGround()
     {
-        bool _touchGround = Physics.Raycast(transform.position, -transform.up, 1f, groundMask);
-        if (_touchGround) return true;
+        isOnGround = Physics.Raycast(transform.position, -transform.up, 1f, groundMask);
+        if (isOnGround) return true;
         return false;
     }
 }
