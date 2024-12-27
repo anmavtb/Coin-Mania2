@@ -5,19 +5,18 @@ public class PlatformManager : Singleton<PlatformManager>
     [SerializeField] DebugManager debugManager = null;
     [SerializeField] Transform[] allPlatforms = new Transform[0];
 
-    /// <summary>
-    /// Chose a random platform from all platforms in "allPlatforms" and send back an array of two Vector3 symbolizing its corners.
-    /// </summary>
-    /// <returns></returns>
-    public Vector3[] GetRandomPlatform()
+    public Transform[] GetAllPlatforms() { return allPlatforms; }
+
+    public Vector3[] GetPlatformCorners(Transform platform)
     {
-        Vector3[] _platformSize = new Vector3[2];
-        int _random = Random.Range(0, allPlatforms.Length);
-        Bounds _bounds = allPlatforms[_random].GetComponent<Renderer>().bounds;
-        Vector2 _gridSize = new Vector2(_bounds.extents.x, _bounds.extents.z);
-        _platformSize[0] = new Vector3(_gridSize.x + allPlatforms[_random].position.x, _bounds.extents.y + allPlatforms[_random].position.y, _gridSize.y + allPlatforms[_random].position.z);
-        _platformSize[1] = new Vector3(-_gridSize.x + allPlatforms[_random].position.x, _bounds.extents.y + allPlatforms[_random].position.y, -_gridSize.y + allPlatforms[_random].position.z);
-        return _platformSize;
+        Bounds bounds = platform.GetComponent<Renderer>().bounds;
+        Vector2 gridSize = new Vector2(bounds.extents.x, bounds.extents.z);
+
+        Vector3[] corners = new Vector3[2];
+        corners[0] = new Vector3(gridSize.x + platform.position.x, bounds.extents.y + platform.position.y, gridSize.y + platform.position.z);
+        corners[1] = new Vector3(-gridSize.x + platform.position.x, bounds.extents.y + platform.position.y, -gridSize.y + platform.position.z);
+
+        return corners;
     }
 
     private void OnDrawGizmos()

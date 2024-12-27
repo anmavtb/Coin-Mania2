@@ -12,8 +12,9 @@ public class CoinManager : Singleton<CoinManager>
 
     [SerializeField] Transform parent = null;
 
+    [SerializeField, Range(0, 10)] float minDistAllowedFromPlayer = 0;
+    
     Vector3 playerSpawnPoint = Vector3.zero;
-    [SerializeField, Range(0, 10)] float minDistAllowed = 0;
 
     public int CoinsNumber => coinsNumber;
 
@@ -44,18 +45,53 @@ public class CoinManager : Singleton<CoinManager>
 
     void PlaceCoinsInWorld()
     {
-        for (int i = 0; i < coinsNumber; i++)
+        // Fetch all platforms
+        Transform[] platforms = PlatformManager.Instance.GetAllPlatforms();
+        List<Vector3> precomputedPositions = new();
+
+        // Precompute valid positions for each platform
+        foreach (Transform platform in platforms)
+        {
+            Vector3[] platformCorners = PlatformManager.Instance.GetPlatformCorners(platform);
+
+            if (platformCorners.Length < 2) continue;
+
+            for (int i = 0; i < coinsNumber / platforms.Length; i++) // Spread coins evenly
+            {
+                Vector3 randomPosition = GenerateValidPosition(platformCorners);
+
+                if (IsFarFromPlayer(randomPosition))
+                {
+                    precomputedPositions.Add(randomPosition);
+                }
+            }
+        }
+
+        // Place coins in precomputed positions
+        foreach (Vector3 position in precomputedPositions)
         {
             Coin _coin = GetRandomCoin();
-            Vector3 _coinPos = RandomPointOnPlatform(PlatformManager.Instance.GetRandomPlatform());
-            Instantiate(_coin, new Vector3(_coinPos.x, _coinPos.y + _coin.Height, _coinPos.z), Quaternion.identity, parent);
+            Instantiate(_coin, new Vector3(position.x, position.y + _coin.Height, position.z), Quaternion.identity, parent);
         }
     }
 
+    Vector3 GenerateValidPosition(Vector3[] platformCorners)
+    {
+        return new Vector3(
+            UnityEngine.Random.Range(platformCorners[0].x, platformCorners[1].x),
+            platformCorners[0].y + 0.5f,
+            UnityEngine.Random.Range(platformCorners[0].z, platformCorners[1].z)
+        );
+    }
+
+    bool IsFarFromPlayer(Vector3 position)
+    {
+        return Vector3.Distance(position, playerSpawnPoint) > minDistAllowedFromPlayer;
+    }
+
     /// <summary>
-    /// Chose a random coin from the dictionnary and sent it back.
+    /// Choose a random coin from the dictionnary and send it back.
     /// </summary>
-    /// <returns></returns>
     Coin GetRandomCoin()
     {
         Coin _randomCoin = null;
@@ -65,21 +101,5 @@ public class CoinManager : Singleton<CoinManager>
         else
             coinsDictionary.TryGetValue(Coin.CoinTypes.COIN, out _randomCoin);
         return _randomCoin;
-    }
-
-    /// <summary>
-    /// Chose a random point on top of the given platform and sent this point back.
-    /// If this point is too close from the player spawn point (0,0,0) : call itself again to choose another point.
-    /// </summary>
-    /// <param name="_platformSize">The two corners of the given platform</param>
-    /// <returns></returns>
-    Vector3 RandomPointOnPlatform(Vector3[] _platformSize)
-    {
-        Vector3 _result = Vector3.zero;
-        if (_platformSize.Length < 2) return Vector3.zero;
-        _result.x = UnityEngine.Random.Range(_platformSize[0].x, _platformSize[1].x);
-        _result.y = _platformSize[0].y + .5f;
-        _result.z = UnityEngine.Random.Range(_platformSize[0].z, _platformSize[1].z);
-        return _result;
     }
 }
