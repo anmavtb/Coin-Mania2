@@ -32,4 +32,11 @@ public class InputManager : Singleton<InputManager>
         jump.Enable();
         jump.performed += moveComponent.Jump;
     }
+
+    private void OnDisable()
+    {
+        move.Disable();
+        rotate.Disable();
+        jump.Disable();
+    }
 }

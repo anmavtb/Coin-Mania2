@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(AudioSource), typeof(MovementComponent))]
 
-public class Player : MonoBehaviour
+public class Player : Singleton<Player>
 {
     MovementComponent movement = null;
     AudioSource audioData;
@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
     void Init()
     {
         score = 0;
+        InputManager.Instance.enabled = true;
         movement = GetComponent<MovementComponent>();
         audioData = GetComponent<AudioSource>();
     }

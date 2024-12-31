@@ -37,9 +37,10 @@ public class CoinManager : Singleton<CoinManager>
     public void RemoveCoin()
     {
         coinsNumber--;
+        Debug.Log("Left : " + coinsNumber);
         if (coinsNumber <= 0)
         {
-            Debug.Log("Gagné");
+            EndGame.Instance.GameEnd();
         }
     }
 
